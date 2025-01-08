@@ -145,7 +145,7 @@
     if (restaurants != null) {
         for (Restaurant restaurant : restaurants) { 
     %>
-        <form action="restaurant.jsp" method="POST">
+        <form action="ViewRestuarantDetails" method="POST">
             <input type="hidden" name="restaurantId" value="<%= restaurant.getId() %>">
             <div class="restaurant-card">
                 <img src="<%= restaurant.getImgPath() %>" alt="Restaurant Image">

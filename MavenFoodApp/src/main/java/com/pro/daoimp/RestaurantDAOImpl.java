@@ -15,7 +15,7 @@ public class RestaurantDAOImpl implements RestaurantDAO {
     public int add(Restaurant r) {
         try {
             PreparedStatement pstmt = con.prepareStatement(
-                "INSERT INTO `restaurant` (`name`, `delivery_time`, `cuisine_type`, `address`, `rating`, `isActive`, `admin_Id`, `imgPath`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+                "INSERT INTO `restaurant` (`name`, `delivery_time`, `cuisine_type`, `address`, `rating`, `isActive`, `imgPath`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
             );
             pstmt.setString(1, r.getName());
             pstmt.setInt(2, r.getDeliveryTime());
@@ -23,8 +23,7 @@ public class RestaurantDAOImpl implements RestaurantDAO {
             pstmt.setString(4, r.getAddress());
             pstmt.setFloat(5, r.getRating());
             pstmt.setBoolean(6, r.isActive());
-            pstmt.setInt(7, r.getAdminId());
-            pstmt.setString(8, r.getImgPath());
+            pstmt.setString(7, r.getImgPath());
             return pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -49,7 +48,6 @@ public class RestaurantDAOImpl implements RestaurantDAO {
                     rs.getString("address"),
                     rs.getFloat("rating"),
                     rs.getBoolean("isActive"),
-                    rs.getInt("admin_Id"),
                     rs.getString("imgPath")
                 );
             }
@@ -101,7 +99,6 @@ public class RestaurantDAOImpl implements RestaurantDAO {
                     res.getString("address"),
                     res.getFloat("rating"),
                     res.getBoolean("isActive"),
-                    res.getInt("admin_Id"),
                     res.getString("imgPath")
                 ));
             }
@@ -115,7 +112,7 @@ public class RestaurantDAOImpl implements RestaurantDAO {
     public int update(Restaurant r, int id) {
         try {
             PreparedStatement pstmt = con.prepareStatement(
-                "UPDATE `restaurant` SET `name` = ?, `delivery_time` = ?, `cuisine_type` = ?, `address` = ?, `rating` = ?, `isActive` = ?, `admin_Id` = ?, `imgPath` = ? WHERE `id` = ?"
+                "UPDATE `restaurant` SET `name` = ?, `delivery_time` = ?, `cuisine_type` = ?, `address` = ?, `rating` = ?, `isActive` = ?, `imgPath` = ? WHERE `id` = ?"
             );
             pstmt.setString(1, r.getName());
             pstmt.setInt(2, r.getDeliveryTime());
@@ -123,9 +120,7 @@ public class RestaurantDAOImpl implements RestaurantDAO {
             pstmt.setString(4, r.getAddress());
             pstmt.setFloat(5, r.getRating());
             pstmt.setBoolean(6, r.isActive());
-            pstmt.setInt(7, r.getAdminId());
-            pstmt.setString(8, r.getImgPath());
-            pstmt.setInt(9, id);
+            pstmt.setString(7, r.getImgPath());
             return pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

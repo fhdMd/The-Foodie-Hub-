@@ -23,7 +23,7 @@ public class Logout extends HttpServlet{
 		
 		HttpSession sesh=req.getSession();
 		sesh.setAttribute("user", null);
-		resp.sendRedirect("home");
+		resp.sendRedirect("index.jsp");
 		
 	}
 

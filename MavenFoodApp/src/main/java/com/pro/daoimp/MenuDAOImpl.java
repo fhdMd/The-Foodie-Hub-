@@ -12,19 +12,21 @@ import com.pro.model.Menu;
 import com.pro.util.Util;
 
 public class MenuDAOImpl implements MenuDAO {
+    // Database connection
     Connection con = Util.getCon();
 
     @Override
     public int add(Menu m) {
         try {
             PreparedStatement pstmt = con.prepareStatement(
-                "INSERT INTO `menu` (`name`, `price`, `description`, `imagepath`, `isAvailable`) VALUES (?, ?, ?, ?, ?)"
+                "INSERT INTO `menu` (`restaurantId`, `name`, `price`, `description`, `imagepath`, `isAvailable`) VALUES (?, ?, ?, ?, ?, ?)"
             );
-            pstmt.setString(1, m.getName());
-            pstmt.setInt(2, m.getPrice());
-            pstmt.setString(3, m.getDescription());
-            pstmt.setString(4, m.getImgPath());
-            pstmt.setBoolean(5, m.isAvailable());
+            pstmt.setInt(1, m.getRestarauntId());
+            pstmt.setString(2, m.getName());
+            pstmt.setInt(3, m.getPrice());
+            pstmt.setString(4, m.getDescription());
+            pstmt.setString(5, m.getImgPath());
+            pstmt.setBoolean(6, m.isAvailable());
             return pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -41,6 +43,7 @@ public class MenuDAOImpl implements MenuDAO {
             if (res.next()) {
                 return new Menu(
                     res.getInt("id"),
+                    res.getInt("restaurantId"),
                     res.getString("name"),
                     res.getInt("price"),
                     res.getString("description"),
@@ -55,26 +58,26 @@ public class MenuDAOImpl implements MenuDAO {
     }
 
     @Override
-    public void getAll() {
-        try {
-            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM `menu`");
-            ResultSet res = pstmt.executeQuery();
-            List<Menu> menuList = extracAL(res);
-            for (Menu menu : menuList) {
-                System.out.println(menu);
-            }
+    public List<Menu> getAll(int restaurantId) {
+    	ResultSet res=null;
+    	try {
+            // Query to get all menu items for a specific restaurant
+            PreparedStatement pstmt = con.prepareStatement("SELECT * FROM `menu` WHERE `restaurantId` = ?");
+            pstmt.setInt(1, restaurantId);  // Set the restaurantId parameter
+            res = pstmt.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return extractAL(res);
     }
-
     @Override
-    public List<Menu> extracAL(ResultSet res) {
+    public List<Menu> extractAL(ResultSet res) {
         List<Menu> menuList = new ArrayList<>();
         try {
             while (res.next()) {
                 Menu menu = new Menu(
                     res.getInt("id"),
+                    res.getInt("restaurantId"),
                     res.getString("name"),
                     res.getInt("price"),
                     res.getString("description"),
@@ -86,6 +89,7 @@ public class MenuDAOImpl implements MenuDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+ 
         return menuList;
     }
 
@@ -93,14 +97,15 @@ public class MenuDAOImpl implements MenuDAO {
     public int update(Menu m, int id) {
         try {
             PreparedStatement pstmt = con.prepareStatement(
-                "UPDATE `menu` SET `name` = ?, `price` = ?, `description` = ?, `imagepath` = ?, `isAvailable` = ? WHERE `id` = ?"
+                "UPDATE `menu` SET `restaurantId` = ?, `name` = ?, `price` = ?, `description` = ?, `imagepath` = ?, `isAvailable` = ? WHERE `id` = ?"
             );
-            pstmt.setString(1, m.getName());
-            pstmt.setInt(2, m.getPrice());
-            pstmt.setString(3, m.getDescription());
-            pstmt.setString(4, m.getImgPath());
-            pstmt.setBoolean(5, m.isAvailable());
-            pstmt.setInt(6, id);
+            pstmt.setInt(1, m.getRestarauntId());
+            pstmt.setString(2, m.getName());
+            pstmt.setInt(3, m.getPrice());
+            pstmt.setString(4, m.getDescription());
+            pstmt.setString(5, m.getImgPath());
+            pstmt.setBoolean(6, m.isAvailable());
+            pstmt.setInt(7, id);
             return pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
